@@ -88,6 +88,7 @@ public:
   int peekAddress(int virtualAddress) const;
 
   // program execution, declare fetch and execute member functions here
+  void fetch();
   int runSimulation(int maxCycles = 100, bool verbose = false);
 
   // accessor methods, mostly for testing
