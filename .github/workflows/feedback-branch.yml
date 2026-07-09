@@ -1,0 +1,25 @@
+name: Setup Feedback Branch
+on:
+  push:
+    branches: [ main ]
+permissions:
+  contents: write
+jobs:
+  feedback-branch:
+    name: Create feedback branch if missing
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.repository.is_template }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create feedback branch from initial commit
+        run: |
+          if git ls-remote --exit-code --heads origin feedback >/dev/null 2>&1; then
+            echo "feedback branch already exists, nothing to do"
+          else
+            ROOT=$(git rev-list --max-parents=0 HEAD | tail -n 1)
+            git branch feedback "$ROOT"
+            git push origin feedback
+            echo "created feedback branch at initial commit $ROOT"
+          fi
