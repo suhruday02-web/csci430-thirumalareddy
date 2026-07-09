@@ -260,7 +260,12 @@ int HypotheticalMachineSimulator::translateAddress(int virtualAddress) const
 {
   if (virtualAddress < memoryBaseAddress || virtualAddress > memoryBoundsAddress)
   {
-    throw SimulatorException("Error: illegal memory address reference");
+    string msg = "<HypotheticalMachineSimulator:translateAddress> error illegal virtual address given \n"
+                 "   address to translate must be valid for this simulation\n"
+                 "   virtualAddress: " +
+                 to_string(virtualAddress) + "\n" + "   memoryBaseAddress: " + to_string(memoryBaseAddress) +
+                 "\n" + "   memoryBoundsAddress: " + to_string(memoryBoundsAddress);
+    throw SimulatorException(msg);
   }
 
   return virtualAddress - memoryBaseAddress;
@@ -338,7 +343,14 @@ void HypotheticalMachineSimulator::execute()
 
   irOpcode = static_cast<OpcodeMnemonic>(ir / 1000);
   irAddress = ir % 1000;
-  incrementPC();
+
+  // HALT should leave PC pointing at the halt instruction, so
+  // only advance PC in preparation for the next fetch for
+  // instructions that actually continue execution.
+  if (irOpcode != NOOP_HALT)
+  {
+    incrementPC();
+  }
 
   switch (irOpcode)
   {
@@ -453,48 +465,46 @@ int HypotheticalMachineSimulator::runSimulation(int maxCycles, bool verbose)
   // after uncommenting the code below, you shold go back to the first failing
   // unit test and figure out and fix that issue, and proceed fixing issues 1
   // at a time.
-  /*
-     bool done = false;
+  bool done = false;
 
-     while (!done)
-     {
-     // perform fetch stage
-     fetch();
-     irOpcode = NOOP_HALT;
-     irAddress = 0;
-     if (verbose)
-     {
+  while (!done)
+  {
+    // perform fetch stage
+    fetch();
+    irOpcode = NOOP_HALT;
+    irAddress = 0;
+    if (verbose)
+    {
       cout << "==================== cycle: " << cycle + 1 << endl;
       cout << "-------------------- fetch" << endl;
       cout << *this;
-     }
+    }
 
-     // perform execute stage
-     execute();
-     if (verbose)
-     {
+    // perform execute stage
+    execute();
+    if (verbose)
+    {
       cout << "-------------------- execute" << endl;
       cout << *this;
-     }
+    }
 
-     // increment cycle counter for next cycle
-     cycle++;
+    // increment cycle counter for next cycle
+    cycle++;
 
-     // we are done if we exceed the maximum number of
-     // cycles to simulate
-     if (cycle >= maxCycles)
-     {
+    // we are done if we exceed the maximum number of
+    // cycles to simulate
+    if (cycle >= maxCycles)
+    {
       done = true;
-     }
+    }
 
-     // or we are done when we hit a NOOP_HALT
-     // instruction
-     if (irOpcode == NOOP_HALT)
-     {
+    // or we are done when we hit a NOOP_HALT
+    // instruction
+    if (irOpcode == NOOP_HALT)
+    {
       done = true;
-     }
-     }
-   */
+    }
+  }
 
   return cycle;
 }
@@ -631,14 +641,10 @@ ostream& operator<<(ostream& out, const HypotheticalMachineSimulator& sim)
   out << endl;
 
   out << "Memory" << endl << "------" << endl;
-  // uncomment the following once you have completed task 7 so that system tests
-  // and full simulations will work
-  /*
   for (auto addr : sim.memoryAddressList)
   {
     out << setw(3) << left << addr << ": " << sim.peekAddress(addr) << endl;
   }
-  */
 
   out << endl;
 
