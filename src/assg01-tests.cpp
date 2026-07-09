@@ -20,7 +20,7 @@ using namespace std;
 
 // change these to #define when ready to begin working on each task,
 // once defined they will enable the tests declared below for each task
-#undef task1
+#define task1
 #undef task2
 #undef task3_1
 #undef task3_2

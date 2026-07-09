@@ -218,7 +218,31 @@ void HypotheticalMachineSimulator::loadProgram(string programFile)
  *   address.  Thus we can only address memory from 000 - 999
  *   given the limits of the expected opcode format.
  */
-// your implementation of initializeMemory() should go here
+void HypotheticalMachineSimulator::initializeMemory(int memoryBaseAddress, int memoryBoundsAddress)
+{
+  if (memoryBaseAddress < 0 || memoryBaseAddress > 999)
+  {
+    throw SimulatorException("Error: memory base address must be in range 0 - 999");
+  }
+  if (memoryBoundsAddress < 0 || memoryBoundsAddress > 999)
+  {
+    throw SimulatorException("Error: memory bounds address must be in range 0 - 999");
+  }
+  if (memoryBaseAddress > memoryBoundsAddress)
+  {
+    throw SimulatorException("Error: memory base address must not be greater than bounds address");
+  }
+
+  this->memoryBaseAddress = memoryBaseAddress;
+  this->memoryBoundsAddress = memoryBoundsAddress;
+  this->memorySize = memoryBoundsAddress - memoryBaseAddress + 1;
+
+  memory = new int[memorySize];
+  for (int i = 0; i < memorySize; i++)
+  {
+    memory[i] = 0;
+  }
+}
 
 /**
  * @brief memory address translation
