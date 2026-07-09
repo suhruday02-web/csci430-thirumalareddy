@@ -175,9 +175,7 @@ void HypotheticalMachineSimulator::loadProgram(string programFile)
     throw SimulatorException("Error: expecting MEM from program file");
   }
 
-  // Task 3.2: uncomment this call to initializeMemory() once you have completed
-  // task 3
-  // initializeMemory(memoryBaseAddress, memoryBoundsAddress);
+  initializeMemory(memoryBaseAddress, memoryBoundsAddress);
 
   // Finally load memory contents.  Remaining lines of file from
   // current line to last line are key/value pairs of
@@ -186,8 +184,7 @@ void HypotheticalMachineSimulator::loadProgram(string programFile)
   int addr;
   while (programStream >> addr >> value)
   {
-    // Task 3.2: uncomment this call to pokeAddress() once you have completed task 3
-    // pokeAddress(addr, value);
+    pokeAddress(addr, value);
 
     // keep track of memory addresses for display purposes
     memoryAddressList.push_back(addr);
@@ -282,7 +279,11 @@ int HypotheticalMachineSimulator::translateAddress(int virtualAddress) const
  * @param value The value to be written into the indicated virtual
  *   address.
  */
-// your implementation of pokeAddress() should go here
+void HypotheticalMachineSimulator::pokeAddress(int virtualAddress, int value)
+{
+  int realAddress = translateAddress(virtualAddress);
+  memory[realAddress] = value;
+}
 
 /**
  * @brief peek memory
@@ -298,7 +299,11 @@ int HypotheticalMachineSimulator::translateAddress(int virtualAddress) const
  * @returns int The value that is currently in the indicated virtual
  *   memory address we are reading from and returning.
  */
-// your implementation of peekAddress() should go here
+int HypotheticalMachineSimulator::peekAddress(int virtualAddress) const
+{
+  int realAddress = translateAddress(virtualAddress);
+  return memory[realAddress];
+}
 
 /**
  * @brief fetch phase

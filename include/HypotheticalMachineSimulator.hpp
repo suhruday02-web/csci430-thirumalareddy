@@ -84,6 +84,8 @@ public:
   void loadProgram(string simulationFile);
   void initializeMemory(int memoryBaseAddress, int memoryBoundsAddress);
   int translateAddress(int virtualAddress) const;
+  void pokeAddress(int virtualAddress, int value);
+  int peekAddress(int virtualAddress) const;
 
   // program execution, declare fetch and execute member functions here
   int runSimulation(int maxCycles = 100, bool verbose = false);
