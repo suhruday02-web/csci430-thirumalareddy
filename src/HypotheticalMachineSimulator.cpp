@@ -370,9 +370,9 @@ void HypotheticalMachineSimulator::execute()
  * Execute a load instruction.
  * @pre current irOpcode is a LOAD when called.
  */
-// implemented in Task 6
 void HypotheticalMachineSimulator::executeLoad()
 {
+  ac = peekAddress(irAddress);
 }
 
 /**
@@ -381,9 +381,9 @@ void HypotheticalMachineSimulator::executeLoad()
  * Execute a store instruction.
  * @pre current irOpcode is a STORE when called
  */
-// implemented in Task 6
 void HypotheticalMachineSimulator::executeStore()
 {
+  pokeAddress(irAddress, ac);
 }
 
 /**
@@ -392,9 +392,9 @@ void HypotheticalMachineSimulator::executeStore()
  * Execute an add instruction.
  * @[re current irOpcode is an ADD when called
  */
-// implemented in Task 6
 void HypotheticalMachineSimulator::executeAdd()
 {
+  ac = ac + peekAddress(irAddress);
 }
 
 /**
@@ -403,9 +403,9 @@ void HypotheticalMachineSimulator::executeAdd()
  * Execute a subtract instruction.
  * @pre current irOpcode is a SUB when called
  */
-// implemented in Task 6
 void HypotheticalMachineSimulator::executeSub()
 {
+  ac = ac - peekAddress(irAddress);
 }
 
 /**
@@ -414,9 +414,9 @@ void HypotheticalMachineSimulator::executeSub()
  * Execute a jump instruction.
  * @pre current irOpcode is a JMP when called
  */
-// implemented in Task 6
 void HypotheticalMachineSimulator::executeJump()
 {
+  pc = irAddress;
 }
 
 /**
