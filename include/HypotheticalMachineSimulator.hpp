@@ -74,6 +74,13 @@ private:
   /// @brief List of memory locations when displaying system state
   list<int> memoryAddressList;
 
+  // instruction execution helper methods, called by execute()
+  void executeLoad();
+  void executeStore();
+  void executeJump();
+  void executeSub();
+  void executeAdd();
+
 public:
   // constructors and destructors
   HypotheticalMachineSimulator();
@@ -89,6 +96,7 @@ public:
 
   // program execution, declare fetch and execute member functions here
   void fetch();
+  void execute();
   int runSimulation(int maxCycles = 100, bool verbose = false);
 
   // accessor methods, mostly for testing
